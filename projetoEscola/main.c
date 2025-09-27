@@ -9,7 +9,7 @@ int main(void){
 
     int sair = 0; //falso
 
-    while (!sair){
+    while(!sair){
         printf("Projeto Escola\n");
         printf("0 - Sair\n");
         printf("1 - Aluno\n");
@@ -27,7 +27,7 @@ int main(void){
                 printf("Módulo Aluno\n");
                 int sairAluno = 0; 
                 int opcaoAluno;
-                while (!sair){
+                while (!sairAluno){
                     printf("0 - Voltar\n");
                     printf("1 - Cadastrar Aluno\n");
                     printf("2 - Listar Aluno\n");
@@ -43,23 +43,33 @@ int main(void){
                         }
                         case 1:{
                             printf("Cadastrar Aluno\n");
-                            printf("Digite a matrícula:\n");
-                            int matricula;
-                            scanf("%d", &matricula);
-                            if(matricula < 0){
-                                printf("Matrícula Inválida!\n");
+                            if(qtdAluno == TAM_ALUNO){
+                                printf("Lista de alunos cheia!\n");
                             }else{
-                                if(qtdAluno == TAM_ALUNO){
-                                    printf("Lista de alunos cheia!\n");
+                                printf("Digite a matrícula:\n");
+                                int matricula;
+                                scanf("%d", &matricula);
+
+                                if(matricula < 0){
+                                    printf("Matrícula Inválida!\n");
                                 }else{
                                     listaAluno[qtdAluno] = matricula;
                                     qtdAluno++;
+                                    printf("Cadastrado com sucesso!\n");
                                 }
                             }
+                            
                             break;
                         }
                         case 2:{
-                            printf("2 - Listar Aluno\n");
+                            printf("Listar Aluno\n");
+                            if(qtdAluno == 0){
+                                printf("Listar aluno vazia\n");
+                            }else{
+                               for(int i = 0; i < qtdAluno; i++){
+                                printf("Matrícula: %d\n", listaAluno[i]);
+                                } 
+                            }
                             break;
                         }
                         case 3:{
@@ -74,9 +84,8 @@ int main(void){
                             printf("Opção inválida\n");
                         }
                     }
-
-                    break;
                 }
+                break;
             }
         
              case 2:{
