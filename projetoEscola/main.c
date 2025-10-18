@@ -17,6 +17,7 @@
 #define MATRICULA_INICIAL 1000
 
 // Codigos de retorno
+
 #define LISTA_CHEIA 1
 #define CAD_SUCESSO 1
 #define MATRICULA_INVALIDA -1
@@ -29,7 +30,8 @@
 #define EXCLUSAO_DISCIPLINA_SUCESSO 6
 #define ATUALIZACAO_DISCIPLINA_SUCESSO 7
 
-// FUNCAO PARA FACILITAR A STRING DE BUSCA
+// FUNÇÕES AUXILIARES PARA BUSCA
+
 char para_maiuscula_manual(char c) {
     if (c >= 'a' && c <= 'z') {
         return c - ('a' - 'A');
@@ -92,6 +94,7 @@ typedef struct {
 } Disciplina;
 
 // VARIAVEIS GLOBAIS 
+
 Matriculado vetor[MAX_PESSOAS];
 Disciplina disciplinas[MAX_DISCI];
 int proximaMatricula = MATRICULA_INICIAL;
@@ -100,6 +103,7 @@ int qtdDisciplinas = 0;
 
 // PROTOTIPOS
 // Menus
+
 int menuGeral();
 int menuListagens();
 int menuMatriculados(const char *c); 
@@ -108,6 +112,7 @@ int menuOrdenacao();
 int menuListagensPessoas();
 
 // CRUD e Auxiliares de Pessoa
+
 int cadastrarPessoa(Matriculado lista[], int *qtd, int tipo);
 int excluirPessoa(Matriculado vetorLocal[], int *qtdPessoas, int tipo);
 int atualizarPessoa(Matriculado vetorLocal[], int qtdPessoas, int tipo);
@@ -115,6 +120,7 @@ int buscarPessoa(Matriculado vetorLocal[], int qtdPessoas, int matricula);
 int gerarMatricula();
 
 // CRUD e Auxiliares de Disciplina
+
 int cadastrarDisciplina(Disciplina listaDisciplina[], int *qtdDisciplina);
 void listarDisciplina(Disciplina listaDisciplina[], int qtdDisciplina);
 int atualizarDisciplina(Disciplina listaDisciplina[], int qtdDisciplina);
@@ -124,6 +130,7 @@ int inserirAlunoDisciplina(Disciplina disciplinasLocal[], int qtdDisciplinasLoca
 int excluirAlunoDisciplina(Disciplina disciplinasLocal[], int qtdDisciplinasLocal, char codigo[], int matAluno);
 
 // Validacao
+
 int ehBissexto(int ano);
 int validar_data_struct(Data d);
 int validar_nome(char nome[]);
@@ -132,7 +139,8 @@ int validar_CPF(const char cpf[]);
 int validar_codigoDisciplina(const char codigo[]);
 int ler_opcao(int min, int max);
 
-// Listagens (Itens 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)
+// Listagens 
+
 void listarPessoas(Matriculado vetorLocal[], int qtdPessoas, int tipo);
 void listarDisciplinaCompleta(Disciplina disciplinasLocal[], int qtdDisciplinasLocal, Matriculado vetorLocal[], int qtdPessoas);
 void listarPessoasPorSexo(Matriculado vetorLocal[], int qtdPessoas, int tipo, char sexo);
@@ -157,7 +165,7 @@ int menuGeral() {
     return ler_opcao(0, 4);
 }
 
-// CORRECAO: Usar const char *c para evitar warning de overflow de string
+
 int menuMatriculados(const char *c) {
     printf("\n--- MENU %s ---\n", c);
     printf("0 - Voltar\n");
@@ -189,8 +197,8 @@ int menuListagens() {
     printf("1 - Aniversariantes do mês (Item 15)\n");
     printf("2 - Disciplinas acima de %d alunos (Item 18)\n", VAGAS_LIMITE);
     printf("3 - Alunos em menos de 3 disciplinas (Item 17)\n");
-    printf("4 - Listagens de Pessoas (Por Sexo/Busca)\n"); // Submenu
-    printf("5 - Ordenação de Pessoas (Por Nome/Data)\n"); // Submenu
+    printf("4 - Listagens de Pessoas (Por Sexo/Busca)\n"); 
+    printf("5 - Ordenação de Pessoas (Por Nome/Data)\n"); 
     printf("Escolha uma opção: ");
     return ler_opcao(0, 5);
 }
@@ -198,8 +206,8 @@ int menuListagens() {
 int menuListagensPessoas() {
     printf("\n--- LISTAGENS DE PESSOAS ---\n");
     printf("0 - Voltar\n");
-    printf("1 - Listar por Sexo (Alunos)\n"); // Item 9
-    printf("2 - Listar por Sexo (Professores)\n"); // Item 12
+    printf("1 - Listar por Sexo (Alunos)\n"); 
+    printf("2 - Listar por Sexo (Professores)\n"); 
     printf("3 - Buscar por Trecho no Nome (Item 16)\n");
     printf("Escolha uma opção: ");
     return ler_opcao(0, 3);
@@ -217,6 +225,7 @@ int menuOrdenacao() {
 }
 
 // IMPLEMENTACOES DE UTILIDADES E VALIDACOES
+
 int ehBissexto(int ano){
     if((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)) return 1;
     else return 0;
@@ -376,7 +385,6 @@ int excluirPessoa(Matriculado vetorLocal[], int *qtdPessoas, int tipo){
         return MATRICULA_INEXISTENTE;
     }
 
-    // Exclusao logica
     vetorLocal[indice].ativo = 0;
     printf("%s com matrícula %d excluído (logicamente) com sucesso.\n", tipo == ALUNO ? "Aluno" : "Professor", matricula_busca);
     return EXCLUSAO_SUCESSO;
@@ -445,7 +453,7 @@ int cadastrarDisciplina(Disciplina listaDisciplina[], int *qtdDisciplina) {
     scanf(" %9s", codigo);
     if (!validar_codigoDisciplina(codigo)) { printf("Código inválido.\n"); return CODIGO_INVALIDO; }
 
-    for (int i = 0; i < *qtdDisciplina; i++) { // Verifica duplicidade
+    for (int i = 0; i < *qtdDisciplina; i++) { 
         if (strcmp(listaDisciplina[i].codigo, codigo) == 0 && listaDisciplina[i].ativo == 1) {
             printf("Erro: Disciplina já cadastrada com este código.\n");
             return CODIGO_INVALIDO;
@@ -560,7 +568,6 @@ int excluirDisciplina(Disciplina listaDisciplina[], int *qtdDisciplina) {
     for (int i = 0; i < *qtdDisciplina; i++) {
         if (strcmp(listaDisciplina[i].codigo, codigo) == 0 && listaDisciplina[i].ativo == 1) {
             listaDisciplina[i].ativo = 0; 
-            // Nao rearranja a lista nem decrementa qtdDisciplinas para manter a ordem e os indices
             printf("Disciplina %s excluída (logicamente) com sucesso.\n", codigo);
             return EXCLUSAO_DISCIPLINA_SUCESSO;
         }
@@ -573,14 +580,14 @@ int excluirDisciplina(Disciplina listaDisciplina[], int *qtdDisciplina) {
 int inserirAlunoDisciplina(Disciplina disciplinasLocal[], int qtdDisciplinasLocal, char codigo[], int matAluno) {
     int idxAluno = buscarPessoa(vetor, qtdMatriculados, matAluno);
     if (idxAluno == -1 || vetor[idxAluno].ativo == 0 || vetor[idxAluno].tipo != ALUNO) {
-        return MATRICULA_INEXISTENTE; // Não é um aluno ativo
+        return MATRICULA_INEXISTENTE; 
     }
 
     for (int i = 0; i < qtdDisciplinasLocal; i++) {
         if (disciplinasLocal[i].ativo == 1 && strcmp(disciplinasLocal[i].codigo, codigo) == 0) {
             if (disciplinasLocal[i].qtdAlunos >= MAX_ALUNOS_DISCI) return LISTA_CHEIA;
             for (int j = 0; j < disciplinasLocal[i].qtdAlunos; j++) {
-                if (disciplinasLocal[i].alunosMatriculados[j] == matAluno) return 0; // já matriculado
+                if (disciplinasLocal[i].alunosMatriculados[j] == matAluno) return 0; 
             }
             disciplinasLocal[i].alunosMatriculados[disciplinasLocal[i].qtdAlunos++] = matAluno;
             return CAD_SUCESSO;
@@ -598,12 +605,11 @@ int excluirAlunoDisciplina(Disciplina disciplinasLocal[], int qtdDisciplinasLoca
             }
             if (found == -1) return MATRICULA_INEXISTENTE;
 
-            // Remove o aluno (shift left)
             for (int k = found; k < disciplinasLocal[i].qtdAlunos - 1; k++) {
                 disciplinasLocal[i].alunosMatriculados[k] = disciplinasLocal[i].alunosMatriculados[k+1];
             }
             disciplinasLocal[i].qtdAlunos--;
-            disciplinasLocal[i].alunosMatriculados[disciplinasLocal[i].qtdAlunos] = -1; // Limpa o último
+            disciplinasLocal[i].alunosMatriculados[disciplinasLocal[i].qtdAlunos] = -1; 
 
             return EXCLUSAO_SUCESSO;
         }
@@ -649,7 +655,6 @@ void listarDisciplinaCompleta(Disciplina disciplinasLocal[], int qtdDisciplinasL
     }
 }
 
-// Funcao auxiliar para ordenacao (copia e ordena para nao mudar o vetor principal)
 void listarPessoasOrdenadas(Matriculado vetorLocal[], int qtdPessoas, int tipo, int porNome) {
     Matriculado copia[MAX_PESSOAS];
     int qtdCopia = 0;
@@ -665,13 +670,12 @@ void listarPessoasOrdenadas(Matriculado vetorLocal[], int qtdPessoas, int tipo, 
         return;
     }
 
-    // Ordenacao Bubble Sort na copia
     for (int i = 0; i < qtdCopia - 1; i++) {
         for (int j = i + 1; j < qtdCopia; j++) {
             int troca = 0;
             if (porNome) {
                 if (strcasecmp(copia[i].nome, copia[j].nome) > 0) troca = 1;
-            } else { // Por Data de Nascimento
+            } else { 
                 Data a = copia[i].dataNascimento;
                 Data b = copia[j].dataNascimento;
                 if (a.ano > b.ano || (a.ano == b.ano && (a.mes > b.mes || (a.mes == b.mes && a.dia > b.dia)))) troca = 1;
@@ -805,7 +809,6 @@ int main(void) {
     int opcao;
     int sair = 0;
 
-    // Inicializa arrays de disciplinas
     for (int i = 0; i < MAX_DISCI; i++) {
         disciplinas[i].ativo = 0;
         disciplinas[i].qtdAlunos = 0;
@@ -819,7 +822,7 @@ int main(void) {
         switch (opcao) {
             case 0: sair = 1; break;
             
-            case 1: { // ALUNO
+            case 1: { 
                 int sairAluno = 0;
                 int opcaoAluno;
                 while (!sairAluno) {
@@ -836,7 +839,7 @@ int main(void) {
                 break;
             }
             
-            case 2: { // PROFESSOR
+            case 2: { 
                 int sairProf = 0;
                 int opcaoProf;
                 while (!sairProf) {
@@ -853,7 +856,7 @@ int main(void) {
                 break;
             }
             
-            case 3: { // DISCIPLINA
+            case 3: { 
                 int sairDisciplina = 0, opcaoDisciplina;
                 while (!sairDisciplina) {
                     opcaoDisciplina = menuDisciplina();
@@ -863,7 +866,7 @@ int main(void) {
                         case 2: listarDisciplina(disciplinas, qtdDisciplinas); break; 
                         case 3: excluirDisciplina(disciplinas, &qtdDisciplinas); break;
                         
-                        case 4: { // INSERIR ALUNO (Matricula)
+                        case 4: { 
                             char cod[10];
                             int mat;
                             printf("Código da disciplina: "); scanf(" %9s", cod);
@@ -876,7 +879,7 @@ int main(void) {
                             else if (r == 0) printf("Aluno já matriculado.\n");
                             break;
                         }
-                        case 5: { // REMOVER ALUNO (Desmatricula)
+                        case 5: { 
                             char cod[10];
                             int mat;
                             printf("Código da disciplina: "); scanf(" %9s", cod);
@@ -887,10 +890,10 @@ int main(void) {
                             else if (r == DISCIPLINA_INEXISTENTE) printf("Disciplina não encontrada.\n");
                             break;
                         }
-                        case 6: // ATUALIZAR DISCIPLINA
+                        case 6: 
                             atualizarDisciplina(disciplinas, qtdDisciplinas);
                             break;
-                        case 7: // LISTAR DISCIPLINA COMPLETA 
+                        case 7:  
                             listarDisciplinaCompleta(disciplinas, qtdDisciplinas, vetor, qtdMatriculados);
                             break;
                         default: printf("Opção inválida!\n");
@@ -899,7 +902,7 @@ int main(void) {
                 break;
             }
             
-            case 4: { // LISTAGENS E RELATORIOS
+            case 4: { 
                 int sairLista = 0, opcaoLista;
                 while (!sairLista) {
                     opcaoLista = menuListagens();
@@ -909,7 +912,7 @@ int main(void) {
                         case 2: listarDisciplinasVagasExcedidas(); break;                 
                         case 3: listarAlunosMenos3Disciplinas(); break;                
 
-                        case 4: { // LISTAGENS DE PESSOAS (Por Sexo/Busca - Submenu)
+                        case 4: { 
                             int sairLP = 0, opLP;
                             while (!sairLP) {
                                 opLP = menuListagensPessoas();
@@ -917,16 +920,16 @@ int main(void) {
                                 char busca[NOME_SIZE];
                                 switch (opLP) {
                                     case 0: sairLP = 1; break;
-                                    case 1: printf("Sexo (M/F): "); scanf(" %c", &sexo); listarPessoasPorSexo(vetor, qtdMatriculados, ALUNO, sexo); break;     // Item 9
-                                    case 2: printf("Sexo (M/F): "); scanf(" %c", &sexo); listarPessoasPorSexo(vetor, qtdMatriculados, PROFESSOR, sexo); break; // Item 12
-                                    case 3: printf("Digite 3+ letras para buscar: "); scanf(" %[^\n]", busca); buscarPessoasPorString(vetor, qtdMatriculados, busca); break; // Item 16
+                                    case 1: printf("Sexo (M/F): "); scanf(" %c", &sexo); listarPessoasPorSexo(vetor, qtdMatriculados, ALUNO, sexo); break;     
+                                    case 2: printf("Sexo (M/F): "); scanf(" %c", &sexo); listarPessoasPorSexo(vetor, qtdMatriculados, PROFESSOR, sexo); break; 
+                                    case 3: printf("Digite 3+ letras para buscar: "); scanf(" %[^\n]", busca); buscarPessoasPorString(vetor, qtdMatriculados, busca); break; 
                                     default: printf("Opção inválida!\n");
                                 }
                             }
                             break;
                         }
 
-                        case 5: { // ORDENACAO DE PESSOAS (Submenu)
+                        case 5: { 
                             int sairOrd = 0, opOrd;
                             while (!sairOrd) {
                                 opOrd = menuOrdenacao();
