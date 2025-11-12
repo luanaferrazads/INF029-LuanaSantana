@@ -62,15 +62,15 @@ DataQuebrada quebraData(char data[]){
 	for (i = 0; data[i] != '/'; i++){
 		sDia[i] = data[i];
 	}
-	if(i == 1 || i == 2){ // testa se tem 1 ou dois digitos
-		sDia[i] = '\0';  // coloca o barra zero no final
+	if(i == 1 || i == 2){ 
+		sDia[i] = '\0';  
 	}else {
 		dq.valido = 0;
     return dq;
   }  
 	
 
-	int j = i + 1; //anda 1 cada para pular a barra
+	int j = i + 1; 
 	i = 0;
 
 	for (; data[j] != '/'; j++){
@@ -78,15 +78,15 @@ DataQuebrada quebraData(char data[]){
 		i++;
 	}
 
-	if(i == 1 || i == 2){ // testa se tem 1 ou dois digitos
-		sMes[i] = '\0';  // coloca o barra zero no final
+	if(i == 1 || i == 2){ 
+		sMes[i] = '\0';  
 	}else {
 		dq.valido = 0;
     return dq;
   }
 	
 
-	j = j + 1; //anda 1 cada para pular a barra
+	j = j + 1; 
 	i = 0;
 	
 	for(; data[j] != '\0'; j++){
@@ -94,8 +94,8 @@ DataQuebrada quebraData(char data[]){
 	 	i++;
 	}
 
-	if(i == 2 || i == 4){ // testa se tem 2 ou 4 digitos
-		sAno[i] = '\0';  // coloca o barra zero no final
+	if(i == 2 || i == 4){ 
+		sAno[i] = '\0';  
 	}else {
 		dq.valido = 0;
     return dq;
