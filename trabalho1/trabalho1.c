@@ -539,67 +539,64 @@ void removerAcentos(char *texto) {
     while (texto[i] != '\0') {
         unsigned char uc = (unsigned char)texto[i];
 
-        // Se for início de sequência UTF-8 C3 (195 decimal, -61 signed)
         if (uc == 0xC3) {
             unsigned char next = (unsigned char)texto[i + 1];
             char substituto = 0;
 
-            // mapear segundo byte para letra ASCII (em minúscula quando aplicável)
             switch (next) {
-                /* á à â ã  Á À Â Ã */
-                case 0xA1: case 0xA0: case 0xA2: case 0xA3: substituto = 'a'; break;
-                case 0x81: case 0x80: case 0x82: case 0x83: substituto = 'a'; break;
 
-                /* é è ê ë  É È Ê Ë */
-                case 0xA9: case 0xA8: case 0xAA: case 0xAB: substituto = 'e'; break;
-                case 0x89: case 0x88: case 0x8A: case 0x8B: substituto = 'e'; break;
+                case 0xA1: case 0xA0: case 0xA2: case 0xA3:
+                case 0x81: case 0x80: case 0x82: case 0x83:
+                    substituto = 'a';
+                    break;
 
-                /* í ì î ï  Í Ì Î Ï */
-                case 0xAD: case 0xAC: case 0xAE: case 0xAF: substituto = 'i'; break;
-                case 0x8D: case 0x8C: case 0x8E: case 0x8F: substituto = 'i'; break;
+                case 0xA9: case 0xA8: case 0xAA: case 0xAB:
+                case 0x89: case 0x88: case 0x8A: case 0x8B:
+                    substituto = 'e';
+                    break;
 
-                /* ó ò ô õ ö  Ó Ò Ô Õ Ö */
-                case 0xB3: case 0xB2: case 0xB4: case 0xB5: case 0xB6: substituto = 'o'; break;
-                case 0x93: case 0x92: case 0x94: case 0x95: case 0x96: substituto = 'o'; break;
+                case 0xAD: case 0xAC: case 0xAE: case 0xAF:
+                case 0x8D: case 0x8C: case 0x8E: case 0x8F:
+                    substituto = 'i';
+                    break;
 
-                /* ú ù û ü  Ú Ù Û Ü */
-                case 0xBA: case 0xB9: case 0xBB: case 0xBC: substituto = 'u'; break;
-                case 0x9A: case 0x99: case 0x9B: case 0x9C: substituto = 'u'; break;
+                case 0xB3: case 0xB2: case 0xB4: case 0xB5: case 0xB6:
+                case 0x93: case 0x92: case 0x94: case 0x95: case 0x96:
+                    substituto = 'o';
+                    break;
 
-                /* ç Ç */
-                case 0xA7: substituto = 'c'; break;
-                case 0x87: substituto = 'c'; break;
+                case 0xBA: case 0xB9: case 0xBB: case 0xBC:
+                case 0x9A: case 0x99: case 0x9B: case 0x9C:
+                    substituto = 'u';
+                    break;
+
+                case 0xA7:
+                case 0x87:
+                    substituto = 'c';
+                    break;
 
                 default:
                     substituto = 0;
             }
 
             if (substituto) {
-                // coloca o caracter substituto no lugar do primeiro byte
                 texto[i] = substituto;
 
-                // remove o segundo byte do UTF-8 (shift left a string a partir de i+1)
                 int k = i + 1;
                 while (texto[k + 1] != '\0') {
                     texto[k] = texto[k + 1];
                     k++;
                 }
-                // copiar o terminador
                 texto[k] = '\0';
-
-                // não incrementa i: o caractere atual já foi substituído e está ok
                 i++;
                 continue;
             }
-            // se não mapeou, trata o byte normalmente (vai cair no fluxo abaixo)
         }
 
-        // para letras ASCII maiúsculas: converte para minúscula
         if (texto[i] >= 'A' && texto[i] <= 'Z') {
             texto[i] = texto[i] + 32;
         }
 
-        // avança
         i++;
     }
 }
