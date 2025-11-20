@@ -93,27 +93,30 @@ int teste(int a)
  */
 int q1(char data[])
 {
-    int datavalida = 1;
-    DataQuebrada data_div = quebraData(data);
+    int dataOk = 1;
+    DataQuebrada dt = quebraData(data);
 
-    if (!data_div.valido) datavalida = 0;
+    if (!dt.valido)
+        dataOk = 0;
 
-    int dias_mes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int diasPorMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    if(bissexto(data_div.iAno))
-        dias_mes[1]++;
+    if (bissexto(dt.iAno))
+        diasPorMes[1]++;
 
-    if(data_div.iAno < 100)
-        data_div.iAno += (data_div.iAno > 25)? 1900 : 2000;
+    if (dt.iAno < 100)
+        dt.iAno += (dt.iAno > 25) ? 1900 : 2000;
 
-    if(data_div.iAno < 1900 || data_div.iAno > 2025)
-        datavalida = 0;
-    if(data_div.iMes < 1 || data_div.iMes > 12)
-        datavalida = 0;
-    if(data_div.iDia < 1 || data_div.iDia > dias_mes[data_div.iMes - 1])
-        datavalida = 0;
+    if (dt.iAno < 1900 || dt.iAno > 2025)
+        dataOk = 0;
 
-    return datavalida;
+    if (dt.iMes < 1 || dt.iMes > 12)
+        dataOk = 0;
+
+    if (dt.iDia < 1 || dt.iDia > diasPorMes[dt.iMes - 1])
+        dataOk = 0;
+
+    return dataOk;
 }
 
 
@@ -134,75 +137,81 @@ int q1(char data[])
  */
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
-    
-    DiasMesesAnos dma;
-    int dias_mes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    int dias_t = 0;
-    DataQuebrada dataI = quebraData(datainicial);
-    DataQuebrada dataF = quebraData(datafinal);
+    DiasMesesAnos resultado;
+    DataQuebrada dIni = quebraData(datainicial);
+    DataQuebrada dFim = quebraData(datafinal);
 
+    int mesDias[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    if (q1(datainicial) == 0){
-      dma.retorno = 2;
-      return dma;
-    }else if (q1(datafinal) == 0){
-      dma.retorno = 3;
-      return dma;
-    }else{
-        if (dataI.iAno > dataF.iAno) {
-            dma.retorno = 4;
-            return dma;
-        }
-        if (dataI.iAno == dataF.iAno && dataI.iMes > dataF.iMes) {
-            dma.retorno = 4;
-            return dma;
-        }
-        if (dataI.iAno == dataF.iAno && dataI.iMes == dataF.iMes && dataI.iDia > dataF.iDia) {
-            dma.retorno = 4;
-            return dma;
-        }
-
-        dma.qtdAnos = dataF.iAno - dataI.iAno;
-        if (dataI.iMes > dataF.iMes || (dataI.iMes == dataF.iMes && dataI.iDia > dataF.iDia))
-            dma.qtdAnos--;
-        dataI.iAno += dma.qtdAnos;
-
-        dma.qtdMeses = 0;
-
-
-        int m_i = (dataI.iMes >= dataF.iMes && dataI.iDia != dataF.iDia) ? dataI.iMes - 12 : dataI.iMes;
-        int m_f = dataF.iMes;
-
-        while (m_i < m_f) {
-            dma.qtdMeses++;
-            m_i++;
-        }
-        if (dataI.iDia > dataF.iDia) {
-            dma.qtdMeses--;
-        }
-        if(dma.qtdMeses >= 12) {
-            dma.qtdMeses -= 12;
-            dma.qtdAnos++;
-        }
-        dataI.iMes += dma.qtdMeses;
-
-        if (dataI.iMes > 12) {
-            dataI.iMes -= 12;
-            dataI.iAno++;
-        }
-
-        dias_mes[1] = (bissexto(dataF.iAno))? 29 : 28;
-        dma.qtdDias = (dias_mes[dataI.iMes-1] - dataI.iDia) + dataF.iDia;
-        dma.qtdDias += (bissexto(dataI.iAno) && !bissexto(dataF.iAno)) ? 1 : 0;
-        dma.qtdDias -= (dma.qtdDias >= dias_mes[dataI.iMes - 1])? dias_mes[dataI.iMes - 1] : 0;
-
-
-      dma.retorno = 1;
-      return dma;
-      
+    if (q1(datainicial) == 0)
+    {
+        resultado.retorno = 2;
+        return resultado;
     }
-    
+    else if (q1(datafinal) == 0)
+    {
+        resultado.retorno = 3;
+        return resultado;
+    }
+
+    if (
+        (dIni.iAno > dFim.iAno) ||
+        (dIni.iAno == dFim.iAno && dIni.iMes > dFim.iMes) ||
+        (dIni.iAno == dFim.iAno && dIni.iMes == dFim.iMes && dIni.iDia > dFim.iDia)
+       )
+    {
+        resultado.retorno = 4;
+        return resultado;
+    }
+
+    resultado.qtdAnos = dFim.iAno - dIni.iAno;
+
+    if (dIni.iMes > dFim.iMes || (dIni.iMes == dFim.iMes && dIni.iDia > dFim.iDia))
+        resultado.qtdAnos--;
+
+    dIni.iAno += resultado.qtdAnos;
+
+    resultado.qtdMeses = 0;
+
+    int mesInicialCalc = (dIni.iMes >= dFim.iMes && dIni.iDia != dFim.iDia) ? dIni.iMes - 12 : dIni.iMes;
+    int mesFinalCalc = dFim.iMes;
+
+    while (mesInicialCalc < mesFinalCalc)
+    {
+        resultado.qtdMeses++;
+        mesInicialCalc++;
+    }
+
+    if (dIni.iDia > dFim.iDia)
+        resultado.qtdMeses--;
+
+    if (resultado.qtdMeses >= 12)
+    {
+        resultado.qtdMeses -= 12;
+        resultado.qtdAnos++;
+    }
+
+    dIni.iMes += resultado.qtdMeses;
+
+    if (dIni.iMes > 12)
+    {
+        dIni.iMes -= 12;
+        dIni.iAno++;
+    }
+
+    mesDias[1] = bissexto(dFim.iAno) ? 29 : 28;
+
+    resultado.qtdDias = (mesDias[dIni.iMes - 1] - dIni.iDia) + dFim.iDia;
+
+    resultado.qtdDias += (bissexto(dIni.iAno) && !bissexto(dFim.iAno)) ? 1 : 0;
+
+    resultado.qtdDias -= (resultado.qtdDias >= mesDias[dIni.iMes - 1]) ?
+                           mesDias[dIni.iMes - 1] : 0;
+
+    resultado.retorno = 1;
+    return resultado;
 }
+
 
 /*
  Q3 = encontrar caracter em texto
