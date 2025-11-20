@@ -281,27 +281,22 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
     int qtdOcorrencias = 0;
     int i, j, k, tamBusca;
 
-    // remove acentos do texto e da palavra
     removerAcentos(strTexto);
     removerAcentos(strBusca);
 
-    // calcular tamanho da palavra de busca
     for (tamBusca = 0; strBusca[tamBusca] != '\0'; tamBusca++);
 
-    // busca simples no texto
     for (i = 0, k = 0; strTexto[i] != '\0'; i++) {
 
-        // compara caractere por caractere
         for (j = 0; j < tamBusca; j++) {
             if (strTexto[i + j] != strBusca[j]) {
                 break;
             }
         }
 
-        // encontrou uma ocorrência
         if (j == tamBusca) {
-            posicoes[k++] = i + 1;        // início (contagem começa em 1)
-            posicoes[k++] = i + tamBusca; // fim
+            posicoes[k++] = i + 1;        
+            posicoes[k++] = i + tamBusca; 
             qtdOcorrencias++;
         }
     }
