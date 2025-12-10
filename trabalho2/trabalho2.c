@@ -4,7 +4,78 @@
 
 #include "trabalho2.h"
 
-int vetorPrincipal[TAM];
+typedef struct
+{
+    int *dados;
+    int qtd;
+    int tamanho;
+}EstruturaAux;
+
+EstruturaAux vetorPrincipal[TAM];
+
+
+int posicaoValida(int posicao)
+{
+    if (posicao < 1 || posicao > TAM)
+        return 0;
+    return 1;
+}
+
+
+int existeEstrutura(int posicao)
+{
+    if (vetorPrincipal[posicao].dados == NULL)
+        return 0;
+    return 1;
+}
+
+
+int temEspaco(EstruturaAux *p)
+{
+    if (p->qtd == p->tamanho)
+        return 0;
+    return 1;
+}
+
+
+int buscarElemento(int posicao, int valor)
+{
+    for (int i = 0; i < vetorPrincipal[posicao].qtd; i++)
+    {
+        if (vetorPrincipal[posicao].dados[i] == valor)
+            return i;
+    }
+    return -1;
+}
+
+
+int totalElementos(EstruturaAux *vet)
+{
+    int total = 0;
+    for (int i = 0; i < TAM; i++)
+        total += vet[i].qtd;
+
+    return total;
+}
+
+void ordenarVetor(int vet[], int tamanho)
+{
+    int i, j, aux;
+
+    for (i = 1; i < tamanho; i++)
+    {
+        aux = vet[i];
+        j = i - 1;
+
+        while (j >= 0 && vet[j] > aux)
+        {
+            vet[j + 1] = vet[j];
+            j--;
+        }
+        vet[j + 1] = aux;
+    }
+}
+
 
 /*
 Objetivo: criar estrutura auxiliar na posição 'posicao'.
@@ -19,20 +90,30 @@ Rertono (int)
 */
 int criarEstruturaAuxiliar(int posicao, int tamanho)
 {
+    posicao--;
 
-    int retorno = 0;
-    // a posicao pode já existir estrutura auxiliar
-    retorno = JA_TEM_ESTRUTURA_AUXILIAR;
     // se posição é um valor válido {entre 1 e 10}
-    retorno = POSICAO_INVALIDA;
-    // o tamanho ser muito grande
-    retorno = SEM_ESPACO_DE_MEMORIA;
+    if (!posicaoValida(posicao+1))
+        return POSICAO_INVALIDA;
+    // a posicao pode já existir estrutura auxiliar
+    if (existeEstrutura(posicao))
+        return JA_TEM_ESTRUTURA_AUXILIAR;
     // o tamanho nao pode ser menor que 1
-    retorno = TAMANHO_INVALIDO;
-    // deu tudo certo, crie
-    retorno = SUCESSO;
+    if (tamanho < 1)
+        return TAMANHO_INVALIDO;
 
-    return retorno;
+    // o tamanho ser muito grande (teste de alocação)
+    EstruturaAux *p = malloc(tamanho * sizeof(EstruturaAux));
+    if (p == NULL)
+        return SEM_ESPACO_DE_MEMORIA;
+    free(p);
+
+    // deu tudo certo, crie
+    vetorPrincipal[posicao].dados = malloc(tamanho * sizeof(int));
+    vetorPrincipal[posicao].qtd = 0;
+    vetorPrincipal[posicao].tamanho = tamanho;
+
+    return SUCESSO;
 }
 
 /*
